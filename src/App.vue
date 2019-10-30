@@ -12,7 +12,7 @@
 
       <v-toolbar-items>
         <v-container v-if="isLoggedIn">
-          <v-btn to="/" text >Add Recipe</v-btn>
+          <v-btn to="/recipes/create" text >Add Recipe</v-btn>
           <v-btn @click="logout" text >Logout</v-btn>
         </v-container>
         <v-container v-else>
@@ -56,6 +56,9 @@ export default {
   methods: {
     logout() {
       store.dispatch('resetUserToken');
+      this.$router.push({
+        name: "Recipes"
+      });
     }
   },
   computed: {

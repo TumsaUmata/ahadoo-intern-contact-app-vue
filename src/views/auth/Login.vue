@@ -74,7 +74,6 @@ export default {
 
       axios.post('http://localhost:3000/api/Users/login', credentials)
         .then(response => {
-          console.log(response.data.id);
           store.dispatch('setApiToken', response.data.id);
           router.push('/about');
 
