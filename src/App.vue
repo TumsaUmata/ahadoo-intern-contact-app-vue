@@ -1,32 +1,77 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-app-bar
+      app
+      color="primary"
+      dark
+    >
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-toolbar-title>{{ title }}</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-toolbar-items>
+        <v-container v-if="isLoggedIn">
+          <v-btn to="/" text >Add Recipe</v-btn>
+          <v-btn @click="logout" text >Logout</v-btn>
+        </v-container>
+        <v-container v-else>
+          <v-btn text to="/login">Login</v-btn>
+          <v-btn text to="/signup">Signup</v-btn>
+        </v-container>
+      </v-toolbar-items>
+    </v-app-bar>
+
+    <v-content>
+      <v-container class="fill-height" fluid>
+        <v-layout>
+          <router-view></router-view>
+        </v-layout>
+      </v-container>
+    </v-content>
+    
+    <v-footer
+      color="indigo"
+      app
+    >
+      <span class="white--text">&copy; 2019</span>
+    </v-footer>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import store from './store/index';
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+export default {
+  data() {
+    return {
+      title: 'Recipe App',
+      menu: [
+        {name:"Signup",route:"Signup"},
+        {name:"Login",route:"Login"}
+      ]
+    }
+  },
+  name: 'App',
+  methods: {
+    logout() {
+      store.dispatch('resetUserToken');
+    }
+  },
+  computed: {
+    menus() {
+      console.log(this.isLoggedIn);
+      if (this.isLoggedIn) {
+        this.menu = [
+          {name:"Add Recipe",route:"Recipe"}
+        ]
+      }
+      console.log(this._menu);
+      return this.menu;
+    },
+    isLoggedIn() {
+      return store.getters.getToken !== null;
+    }
+  }
+};
+</script>
