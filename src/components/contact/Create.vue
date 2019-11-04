@@ -33,7 +33,7 @@
           required
         ></v-textarea>
         <!-- <v-text-field
-          v-model="recipe.image"
+          v-model="contact.image"
           label="Image URL"
           :rules="imageRules"
           required
@@ -54,8 +54,6 @@
 </template>
 
 <script>
-import API from "../../lib/RecipeAPI";
-import RecipeForm from "../recipe/RecipeForm";
 import axios from "axios";
 import router from "../../router";
 

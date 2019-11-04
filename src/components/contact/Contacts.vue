@@ -46,19 +46,19 @@
               v-model="page"
               :length="15"
               :total-visible="7"
+              @input="load"
       ></v-pagination>
     </div>
   </v-layout>
 </template>
 
 <script>
-import API from "../../lib/RecipeAPI";
-import axios from 'axios';
+import API from "../../lib/ContactAPI";
 
 export default {
   data() {
     return {
-      page: 1,
+      page: 0,
       recipes: []
     };
   },
@@ -67,10 +67,10 @@ export default {
   },
   methods: {
     load: function() {
-      API.getRecipes(this.page).then(recipes => {
+      API.getContacts(this.page).then(recipes => {
         this.recipes = recipes;
       });
-    }
+    },
   }
 };
 </script>

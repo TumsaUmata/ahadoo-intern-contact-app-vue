@@ -33,7 +33,7 @@
           required
         ></v-textarea>
         <!-- <v-text-field
-          v-model="recipe.image"
+          v-model="contact.image"
           label="Image URL"
           :rules="imageRules"
           required
@@ -47,33 +47,17 @@
           v-on:change="handleFileUpload()"
         />
         <v-btn class="mr-4" @click="submit">submit</v-btn>
+        <v-btn @click="clear">clear</v-btn>
       </v-form>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import API from "../../lib/RecipeAPI";
-import RecipeForm from "../recipe/RecipeForm";
-import router from "../../router/index";
-import axios from "axios";
-
 export default {
-  components: {
-    RecipeForm
-  },
+  props: ["recipe", "onSubmit"],
   data() {
     return {
-      recipe: {
-        name: "",
-        telephone: "",
-        about: "",
-        address: "",
-        event: "",
-        image: ""
-      },
-      userId: sessionStorage.getItem("userId"),
-      token: sessionStorage.getItem("token"),
       valid: true,
       nameRules: [
         name => {
@@ -97,7 +81,7 @@ export default {
       ],
       addressRules: [
         address => {
-          if (address.trim() === "") return "Address must not be empty!";
+          if (address.trim() === "") return "Ingredient must not be empty!";
           return true;
         }
       ],
@@ -106,63 +90,23 @@ export default {
           if (event.trim() === "") return "HowToCook must not be empty!";
           return true;
         }
-      ]
+      ],
+      // imageRules: [(image) => {
+      //     if (image.trim() === '') return 'Image must not be empty!';
+      //     return true;
+      // }],
+      file: ""
     };
   },
-  mounted() {
-    const { id } = this.$route.params;
-    this.load(id);
-  },
   methods: {
-    load(id) {
-      API.getRecipe(id).then(recipe => {
-        this.recipe = recipe;
-      });
-    },
     submit() {
-      const data = {
-        name: this.recipe.name,
-        telephone: this.recipe.telephone,
-        about: this.recipe.about,
-        address: this.recipe.address,
-        event: this.recipe.event,
-        image: this.file.name,
-        userId: this.recipe.userId
-      };
-      //console.log(this.token)
-      const URL = "http://localhost:3000/contacts/" + this.recipe.id + "";
-      axios({
-        method: "patch",
-        url: URL,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`
-        },
-        data: data
-      })
-        .then(_ => {
-          router.push("/recipes");
-        })
-        .catch(error => {});
-
-      let formData = new FormData();
-      //Add the form data we need to submit
-      formData.append("file", this.file);
-      axios
-        .post("http://localhost:3000/containers/images/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${this.token}`
-          }
-        })
-        .then(function() {
-          //console.log('saved')
-        })
-        .catch(function() {
-          // console.log('error');
-        });
+      if (this.valid) {
+        this.onSubmit();
+      }
     },
-
+    clear() {
+      this.$refs.form.reset();
+    },
     handleFileUpload() {
       console.log(this.$refs.file.files[0].name);
       this.file = this.$refs.file.files[0];

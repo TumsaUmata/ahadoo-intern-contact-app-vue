@@ -18,34 +18,19 @@
             dark
             flat
           >
-            <v-toolbar-title>Signup Form</v-toolbar-title>
+            <v-toolbar-title>Login Form</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-card-text>
             <v-form>
               <v-text-field
-                label="First Name"
-                name="firstName"
-                prepend-icon="mdi-account"
-                type="text"
-                v-model="firstName"
-              ></v-text-field>
-
-               <v-text-field
-                label="Last Name"
-                name="lastName"
-                prepend-icon="mdi-account"
-                type="text"
-                v-model="lastName"
-              ></v-text-field>
-
-              <v-text-field
-                label="Email"
+                label="Login"
                 name="login"
-                prepend-icon="mdi-email"
+                prepend-icon="mdi-account"
                 type="text"
                 v-model="email"
               ></v-text-field>
+
               <v-text-field
                 id="password"
                 label="Password"
@@ -58,7 +43,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="registerUser">Signup</v-btn>
+            <v-btn color="primary" @click="login">Login</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -68,31 +53,36 @@
 
 <script>
 
+// import API from '../../lib/AuthAPI';
 import axios from 'axios';
-import router from '../../router/index';
+import store from '../../store';
+import router from '../../router';
 
 export default {
   data() {
     return {
       email: "",
-      firstName: "",
-      lastName: "",
       password: "",
-      token: "",
     }
   },
   methods: {
-    registerUser() {
+    login() {
       const credentials = {
         email: this.email,
         password: this.password,
-        lastName: this.lastName,
-        firstName: this.firstName
       }
 
-      axios.post('http://localhost:3000/users', credentials)
+      axios.post('http://localhost:3000/users/login', credentials)
         .then(response => {
-          router.push('/login');
+          console.log(response)
+          sessionStorage.setItem('token',response.data.token_userId[0])
+          sessionStorage.setItem('userId',response.data.token_userId[1])
+          store.dispatch('setApiToken', response.data.token_userId[0]);
+          router.push('/recipes');
+
+      })
+      .catch((error) => {
+        console.log(error);
       })
     }
   }

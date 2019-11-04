@@ -3,21 +3,21 @@ import axios from 'axios';
 const API_URL = "http://localhost:3000/contacts";
 
 export default {
-  getRecipes(skip) {
-    return fetch(API_URL + `?filter[limit]=3&filter[skip]=` + skip)
+  getContacts(skip) {
+    return fetch(API_URL + `?filter[limit]=6&filter[skip]=` + skip)
         .then(response => response.json());
   },
-  getRecipe(id) {
+  getContact(id) {
     return fetch(`${API_URL}/${id}`)
         .then(response => response.json());
   },
-  createRecipe(product) {
+  createContact(product) {
     return axios.post(API_URL, product);
   },
-  updateRecipe(id, product) {
+  updateContact(id, product) {
     return axios.put(`${API_URL}/${id}`, product);
   },
-  deleteRecipe(id) {
+  deleteContact(id) {
     return axios.delete(`${API_URL}/${id}`);
   },
 };

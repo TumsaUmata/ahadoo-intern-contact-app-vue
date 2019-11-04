@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Login from '../views/auth/Login.vue'
-import Signup from '../views/auth/Signup.vue'
-import Recipes from '../views/recipe/Recipes'
-import Recipe from '../views/recipe/Recipe'
-import Create from '../views/recipe/Create'
-import Edit from '../views/recipe/Edit'
+import Login from '../components/auth/Login.vue'
+import Signup from '../components/auth/Signup.vue'
+import Recipes from '../components/contact/Contacts'
+import Recipe from '../components/contact/Contact'
+import Create from '../components/contact/Create'
+import Edit from '../components/contact/Edit'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!sessionStorage.getItem('token')) {
@@ -62,7 +62,7 @@ const routes = [
     beforeEnter: ifAuthenticated
   },
   {
-    path: '/recipe/:id',
+    path: '/contact/:id',
     name: 'Recipe',
     component: Recipe
   },

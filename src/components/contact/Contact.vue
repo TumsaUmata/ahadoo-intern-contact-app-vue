@@ -72,7 +72,7 @@
           >Edit</v-btn>
           <v-btn
             v-if='token'
-            @click="deleteRecipe()"
+            @click="deleteContact()"
             text
             color="warning"
           >Delete</v-btn>
@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import API from "../../lib/RecipeAPI";
+import API from "../../lib/ContactAPI";
 import axios from 'axios'
 import router from '../../router'
 
@@ -100,12 +100,11 @@ export default {
   },
   methods: {
     load(id) {
-      API.getRecipe(id).then(recipe => {
-        console.log(recipe)
+      API.getContact(id).then(recipe => {
         this.recipe = recipe;
       });
     },
-    deleteRecipe(){
+    deleteContact(){
       const { id } = this.$route.params;
       const URL = 'http://localhost:3000/contacts/'+id+'';
         axios({
