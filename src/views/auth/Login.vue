@@ -72,10 +72,13 @@ export default {
         password: this.password,
       }
 
-      axios.post('http://localhost:3000/api/Users/login', credentials)
+      axios.post('http://localhost:3000/users/login', credentials)
         .then(response => {
-          store.dispatch('setApiToken', response.data.id);
-          router.push('/about');
+          console.log(response)
+          sessionStorage.setItem('token',response.data.token_userId[0])
+          sessionStorage.setItem('userId',response.data.token_userId[1])
+          store.dispatch('setApiToken', response.data.token_userId[0]);
+          router.push('/recipes');
 
       })
       .catch((error) => {

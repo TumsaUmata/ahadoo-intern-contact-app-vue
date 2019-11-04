@@ -24,12 +24,21 @@
           <v-card-text>
             <v-form>
               <v-text-field
-                label="Username"
-                name="username"
+                label="First Name"
+                name="firstName"
                 prepend-icon="mdi-account"
                 type="text"
-                v-model="username"
+                v-model="firstName"
               ></v-text-field>
+
+               <v-text-field
+                label="Last Name"
+                name="lastName"
+                prepend-icon="mdi-account"
+                type="text"
+                v-model="lastName"
+              ></v-text-field>
+
               <v-text-field
                 label="Email"
                 name="login"
@@ -66,7 +75,8 @@ export default {
   data() {
     return {
       email: "",
-      username: "",
+      firstName: "",
+      lastName: "",
       password: "",
       token: "",
     }
@@ -76,10 +86,11 @@ export default {
       const credentials = {
         email: this.email,
         password: this.password,
-        username: this.username,
+        lastName: this.lastName,
+        firstName: this.firstName
       }
 
-      axios.post('http://localhost:3000/api/Users', credentials)
+      axios.post('http://localhost:3000/users', credentials)
         .then(response => {
           router.push('/login');
       })

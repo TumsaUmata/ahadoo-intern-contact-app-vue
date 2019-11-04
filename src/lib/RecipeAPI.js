@@ -1,10 +1,10 @@
-import ezFetch from 'ez-fetch';
+import axios from 'axios';
 
-const API_URL = "http://localhost:3000/api/recipes";
+const API_URL = "http://localhost:3000/contacts";
 
 export default {
-  getRecipes() {
-    return fetch(API_URL)
+  getRecipes(skip) {
+    return fetch(API_URL + `?filter[limit]=3&filter[skip]=` + skip)
         .then(response => response.json());
   },
   getRecipe(id) {
@@ -12,12 +12,12 @@ export default {
         .then(response => response.json());
   },
   createRecipe(product) {
-    return ezFetch.post(API_URL, product);
+    return axios.post(API_URL, product);
   },
   updateRecipe(id, product) {
-    return ezFetch.put(`${API_URL}/${id}`, product);
+    return axios.put(`${API_URL}/${id}`, product);
   },
   deleteRecipe(id) {
-    return ezFetch.delete(`${API_URL}/${id}`);
+    return axios.delete(`${API_URL}/${id}`);
   },
 };

@@ -1,41 +1,81 @@
 <template>
-    <v-layout row wrap>
+  <v-layout
+    row
+    wrap
+  >
     <v-flex class="xs12 sm8 offset-sm2">
       <v-card>
-        <v-img :src="recipe.image" height="400px">
+        <v-img
+          :src="'http://localhost:3000/containers/images/download/' + recipe.image"
+          height="400px"
+        >
         </v-img>
         <v-card-title primary-title>
           <div>
-            <h3 class="headline mb-0">{{recipe.title}}</h3>
+            <h3 class="headline mb-0">{{recipe.name}}</h3>
           </div>
         </v-card-title>
-        <v-card-subtitle>
-          <div>
-            <div>{{recipe.description}}</div>
+        <v-divider class="mx-4"></v-divider>
+
+        <v-card-text>
+          <v-row
+            align="center"
+            class="mx-0"
+          >
+            <v-rating
+              :value="4.5"
+              color="amber"
+              dense
+              half-increments
+              readonly
+              size="14"
+            ></v-rating>
+
+            <div class="grey--text ml-4">Tel: {{recipe.telephone}}}</div>
+          </v-row>
+
+          <div class="my-4 subtitle-1 black--text">
+            About:
           </div>
-        </v-card-subtitle>
-        <v-card-subtitle>
-          <div>
-            <div>{{recipe.ingredient}}</div>
+          <div>{{recipe.about}}</div>
+        </v-card-text>
+
+        <v-divider class="mx-4"></v-divider>
+
+        <v-card-text>
+          <div class="my-4 subtitle-1 black--text">
+            Address:
           </div>
-        </v-card-subtitle>
-        <v-card-subtitle>
-          <div>
-            <div>{{recipe.howtocook}}</div>
+          <div>{{recipe.address}}</div>
+        </v-card-text>
+
+        <v-divider class="mx-4"></v-divider>
+
+        <v-card-text>
+          <div class="my-4 subtitle-1 black--text">
+            A Special Event, Ceremony, or Celebration:
           </div>
-        </v-card-subtitle>
+          <div>{{recipe.event}}</div>
+        </v-card-text>
+
         <v-card-actions>
-          <v-btn 
+          <v-btn
+            v-if='token'
             :to="{
               name: 'Edit',
               params: {
                 id: recipe.id
               }
             }"
-            text color="primary">Edit</v-btn>
-            <v-btn 
+            text
+            color="primary"
+          >Edit</v-btn>
+          <v-btn
+            v-if='token'
             @click="deleteRecipe()"
-            text color="warning">Delete</v-btn>
+            text
+            color="warning"
+          >Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -43,35 +83,47 @@
 </template>
 
 <script>
-
-import API from '../../lib/RecipeAPI';
+import API from "../../lib/RecipeAPI";
+import axios from 'axios'
+import router from '../../router'
 
 export default {
-    data(){
-        return {
-            recipe: {},
-        };
+  data() {
+    return {
+      recipe: {},
+      token: sessionStorage.getItem('token')
+    };
+  },
+  mounted() {
+    const { id } = this.$route.params;
+    this.load(id);
+  },
+  methods: {
+    load(id) {
+      API.getRecipe(id).then(recipe => {
+        console.log(recipe)
+        this.recipe = recipe;
+      });
     },
-    mounted() {
+    deleteRecipe(){
       const { id } = this.$route.params;
-      this.load(id);
-    },
-    methods: {
-      load(id) {
-        API.getRecipe(id).then((recipe) => {
-          this.recipe = recipe;
-        });
-      },
-      deleteRecipe(){
-        const { id } = this.$route.params;
+      const URL = 'http://localhost:3000/contacts/'+id+'';
+        axios({
+          method: 'delete',
+          url: URL,
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.token}`
+          }
+        })
+          .then(_ => {
+          router.push('/recipes')
+        })
+        .catch(error => {
+          
+        })
 
-        API.deleteRecipe(id)
-          .then(() => {
-            this.$router.push({
-              name: 'Recipes'
-            });
-          });
-      },
     },
+  }
 };
 </script>

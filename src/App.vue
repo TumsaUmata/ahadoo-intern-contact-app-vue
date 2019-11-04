@@ -6,13 +6,13 @@
       dark
     >
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-toolbar-title>{{name}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
       <v-toolbar-items>
         <v-container v-if="isLoggedIn">
-          <v-btn to="/recipes/create" text >Add Recipe</v-btn>
+          <v-btn to="/recipes/create" text >Add Contact</v-btn>
           <v-btn @click="logout" text >Logout</v-btn>
         </v-container>
         <v-container v-else>
@@ -45,7 +45,7 @@ import store from './store/index';
 export default {
   data() {
     return {
-      title: 'Recipe App',
+      name: 'Contact App',
       menu: [
         {name:"Signup",route:"Signup"},
         {name:"Login",route:"Login"}
@@ -56,6 +56,8 @@ export default {
   methods: {
     logout() {
       store.dispatch('resetUserToken');
+      sessionStorage.removeItem('token')
+      sessionStorage.removeItem('userId')
       this.$router.push({
         name: "Recipes"
       });

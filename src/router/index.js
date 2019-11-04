@@ -8,6 +8,22 @@ import Recipe from '../views/recipe/Recipe'
 import Create from '../views/recipe/Create'
 import Edit from '../views/recipe/Edit'
 
+const ifNotAuthenticated = (to, from, next) => {
+  if (!sessionStorage.getItem('token')) {
+    next()
+    return
+  }
+  next('/')
+}
+
+const ifAuthenticated = (to, from, next) => {
+  if (sessionStorage.getItem('token')) {
+    next()
+    return
+  }
+  next('/login')
+}
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -24,22 +40,26 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
+    beforeEnter: ifNotAuthenticated
   },
   {
     path: '/signup',
     name: 'signup',
-    component: Signup
+    component: Signup,
+    beforeEnter: ifNotAuthenticated
   },
   {
     path: '/recipes',
     name: 'Recipes',
-    component: Recipes
+    component: Recipes,
+    beforeEnter: ifNotAuthenticated
   },
   {
     path: '/recipes/create',
     name: 'Create',
-    component: Create
+    component: Create,
+    beforeEnter: ifAuthenticated
   },
   {
     path: '/recipe/:id',
@@ -49,7 +69,8 @@ const routes = [
   {
     path: '/recipes/:id/edit',
     name: 'Edit',
-    component: Edit
+    component: Edit,
+    beforeEnter: ifAuthenticated
   }
 ]
 

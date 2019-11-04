@@ -3,40 +3,50 @@
     <v-flex xs12 sm8 offset-sm2>
       <v-form ref="form" v-model="valid">
         <v-text-field
-          v-model="recipe.title"
-          label="Title"
-          :rules="titleRules"
+          v-model="recipe.name"
+          label="Name"
+          :rules="nameRules"
           required
         ></v-text-field>
         <v-text-field
-          v-model="recipe.description"
-          label="Description"
-          :rules="descriptionRules"
+          v-model="recipe.telephone"
+          label="Telephone"
+          :rules="telephoneRules"
+          required
+        ></v-text-field>
+        <v-text-field
+          v-model="recipe.about"
+          label="About"
+          :rules="aboutRules"
           required
         ></v-text-field>
         <v-textarea
-          v-model="recipe.ingredient"
-          label="Ingredient"
-          :rules="ingredientRules"
+          v-model="recipe.address"
+          label="Address"
+          :rules="addressRules"
           required
         ></v-textarea>
         <v-textarea
-          v-model="recipe.howtocook"
-          label="How To Cook"
-          :rules="howtocookRules"
+          v-model="recipe.event"
+          label="Special Event, Ceremony or Celebration"
+          :rules="eventRules"
           required
         ></v-textarea>
-        <v-text-field
+        <!-- <v-text-field
           v-model="recipe.image"
           label="Image URL"
           :rules="imageRules"
           required
-        ></v-text-field>
+        ></v-text-field> -->
 
-        <v-btn
-          class="mr-4"
-          @click="submit"
-        >submit</v-btn>
+        Image:
+        <input
+          type="file"
+          id="file"
+          ref="file"
+          v-on:change="handleFileUpload()"
+        />
+        <v-btn class="mr-4" @click="submit">submit</v-btn>
         <v-btn @click="clear">clear</v-btn>
       </v-form>
     </v-flex>
@@ -44,39 +54,63 @@
 </template>
 
 <script>
-
 export default {
-  props: ['recipe', 'onSubmit'],
-    data(){
-        return {
-            valid: true,
-            descriptionRules: [(description) => {
-                if (description.trim() === '') return 'Description must not be empty!';
-                return true;
-            }],
-            ingredientRules: [(ingredient) => {
-                if (ingredient.trim() === '') return 'Ingredient must not be empty!';
-                return true;
-            }],
-            howtocookRules: [(howtocook) => {
-                if (howtocook.trim() === '') return 'HowToCook must not be empty!';
-                return true;
-            }],
-            imageRules: [(image) => {
-                if (image.trim() === '') return 'Image must not be empty!';
-                return true;
-            }],
-        };
-    },
-    methods: {
-        submit(){
-            if (this.valid) {
-                this.onSubmit();
-            }
-        },
-        clear(){
-            this.$refs.form.reset();
+  props: ["recipe", "onSubmit"],
+  data() {
+    return {
+      valid: true,
+      nameRules: [
+        name => {
+          if (name.trim() === "") return "Name must not be empty!";
+          return true;
         }
+      ],
+      aboutRules: [
+        about => {
+          if (about.trim() === "")
+            return "About must not be empty!";
+          return true;
+        }
+      ],
+      telephoneRules: [
+        telephone => {
+          if (telephone.trim() === "")
+            return "Telephone must not be empty!";
+          return true;
+        }
+      ],
+      addressRules: [
+        address => {
+          if (address.trim() === "") return "Ingredient must not be empty!";
+          return true;
+        }
+      ],
+      eventRules: [
+        event => {
+          if (event.trim() === "") return "HowToCook must not be empty!";
+          return true;
+        }
+      ],
+      // imageRules: [(image) => {
+      //     if (image.trim() === '') return 'Image must not be empty!';
+      //     return true;
+      // }],
+      file: ""
+    };
+  },
+  methods: {
+    submit() {
+      if (this.valid) {
+        this.onSubmit();
+      }
     },
+    clear() {
+      this.$refs.form.reset();
+    },
+    handleFileUpload() {
+      console.log(this.$refs.file.files[0].name);
+      this.file = this.$refs.file.files[0];
+    }
+  }
 };
 </script>
