@@ -6,13 +6,13 @@
       dark
     >
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
-      <v-toolbar-title>{{name}}</v-toolbar-title>
+      <v-toolbar-title><v-btn text to="/contacts">{{name}}</v-btn></v-toolbar-title>
 
       <v-spacer></v-spacer>
 
       <v-toolbar-items>
         <v-container v-if="isLoggedIn">
-          <v-btn to="/recipes/create" text >Add Contact</v-btn>
+          <v-btn to="/contacts/create" text >Add Contact</v-btn>
           <v-btn @click="logout" text >Logout</v-btn>
         </v-container>
         <v-container v-else>
@@ -56,10 +56,10 @@ export default {
   methods: {
     logout() {
       store.dispatch('resetUserToken');
-      sessionStorage.removeItem('token')
-      sessionStorage.removeItem('userId')
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('userId');
       this.$router.push({
-        name: "Recipes"
+        name: "Contacts"
       });
     }
   },
@@ -68,10 +68,10 @@ export default {
       console.log(this.isLoggedIn);
       if (this.isLoggedIn) {
         this.menu = [
-          {name:"Add Recipe",route:"Recipe"}
+          {name:"Add Contact",route:"Contact"}
         ]
       }
-      console.log(this._menu);
+      console.log(this.menu);
       return this.menu;
     },
     isLoggedIn() {

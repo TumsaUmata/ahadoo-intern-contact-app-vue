@@ -1,4 +1,4 @@
-# recipe-app-vue
+# contact-app-vue
 
 ## Project setup
 ```

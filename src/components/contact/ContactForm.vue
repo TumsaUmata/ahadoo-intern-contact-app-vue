@@ -3,31 +3,31 @@
     <v-flex xs12 sm8 offset-sm2>
       <v-form ref="form" v-model="valid">
         <v-text-field
-          v-model="recipe.name"
+          v-model="contact.name"
           label="Name"
           :rules="nameRules"
           required
         ></v-text-field>
         <v-text-field
-          v-model="recipe.telephone"
+          v-model="contact.telephone"
           label="Telephone"
           :rules="telephoneRules"
           required
         ></v-text-field>
         <v-text-field
-          v-model="recipe.about"
+          v-model="contact.about"
           label="About"
           :rules="aboutRules"
           required
         ></v-text-field>
         <v-textarea
-          v-model="recipe.address"
+          v-model="contact.address"
           label="Address"
           :rules="addressRules"
           required
         ></v-textarea>
         <v-textarea
-          v-model="recipe.event"
+          v-model="contact.event"
           label="Special Event, Ceremony or Celebration"
           :rules="eventRules"
           required
@@ -55,7 +55,7 @@
 
 <script>
 export default {
-  props: ["recipe", "onSubmit"],
+  props: ["contact", "onSubmit"],
   data() {
     return {
       valid: true,
@@ -87,7 +87,7 @@ export default {
       ],
       eventRules: [
         event => {
-          if (event.trim() === "") return "HowToCook must not be empty!";
+          if (event.trim() === "") return "Event must not be empty!";
           return true;
         }
       ],

@@ -3,34 +3,34 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../components/auth/Login.vue'
 import Signup from '../components/auth/Signup.vue'
-import Recipes from '../components/contact/Contacts'
-import Recipe from '../components/contact/Contact'
+import Contacts from '../components/contact/Contacts'
+import Contact from '../components/contact/Contact'
 import Create from '../components/contact/Create'
 import Edit from '../components/contact/Edit'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!sessionStorage.getItem('token')) {
-    next()
+    next();
     return
   }
   next('/')
-}
+};
 
 const ifAuthenticated = (to, from, next) => {
   if (sessionStorage.getItem('token')) {
-    next()
+    next();
     return
   }
   next('/login')
-}
+};
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: Recipes
+    component: Contacts
   },
   {
     path: '/about',
@@ -50,34 +50,34 @@ const routes = [
     beforeEnter: ifNotAuthenticated
   },
   {
-    path: '/recipes',
-    name: 'Recipes',
-    component: Recipes,
+    path: '/contacts',
+    name: 'Contacts',
+    component: Contacts,
     beforeEnter: ifNotAuthenticated
   },
   {
-    path: '/recipes/create',
+    path: '/contacts/create',
     name: 'Create',
     component: Create,
     beforeEnter: ifAuthenticated
   },
   {
     path: '/contact/:id',
-    name: 'Recipe',
-    component: Recipe
+    name: 'Contact',
+    component: Contact
   },
   {
-    path: '/recipes/:id/edit',
+    path: '/contacts/:id/edit',
     name: 'Edit',
     component: Edit,
     beforeEnter: ifAuthenticated
   }
-]
+];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
 
 export default router

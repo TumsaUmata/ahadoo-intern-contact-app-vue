@@ -5,32 +5,32 @@
   >
     <v-flex
       class="xs12 md4"
-      v-for="recipe in recipes"
-      :key="recipe.id"
+      v-for="contact in sortedContacts"
+      :key="contact.id"
     >
       <v-col cols="12">
         <v-card>
           <v-img
-            :src="'http://localhost:3000/containers/images/download/' + recipe.image"
+            :src="'http://localhost:3000/containers/images/download/' + contact.image"
             height="200px"
           >
           </v-img>
           <v-card-title primary-title>
             <div>
-              <h3 class="headline mb-0">{{recipe.name}}</h3>
+              <h3 class="headline mb-0">{{contact.name}}</h3>
             </div>
           </v-card-title>
           <v-card-subtitle>
             <div>
-              <div>{{recipe.about}}</div>
+              <div>{{contact.about}}</div>
             </div>
           </v-card-subtitle>
           <v-card-actions>
             <v-btn
               :to="{
-              name: 'Recipe',
+              name: 'Contact',
               params: {
-                id: recipe.id
+                id: contact.id
               }
             }"
               text
@@ -59,16 +59,24 @@ export default {
   data() {
     return {
       page: 0,
-      recipes: []
+      contacts: []
     };
   },
   mounted() {
     this.load();
   },
+  computed: {
+    sortedContacts: function() {
+      this.contacts.sort( ( a, b) => {
+        return new Date(a.date) - new Date(b.date);
+      });
+      return this.contacts;
+    }
+  },
   methods: {
     load: function() {
-      API.getContacts(this.page).then(recipes => {
-        this.recipes = recipes;
+      API.getContacts(this.page).then(contacts => {
+        this.contacts = contacts;
       });
     },
   }

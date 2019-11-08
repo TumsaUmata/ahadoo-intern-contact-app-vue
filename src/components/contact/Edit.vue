@@ -3,31 +3,31 @@
     <v-flex xs12 sm8 offset-sm2>
       <v-form ref="form" v-model="valid">
         <v-text-field
-          v-model="recipe.name"
+          v-model="contact.name"
           label="Name"
           :rules="nameRules"
           required
         ></v-text-field>
         <v-text-field
-          v-model="recipe.telephone"
+          v-model="contact.telephone"
           label="Telephone"
           :rules="telephoneRules"
           required
         ></v-text-field>
         <v-text-field
-          v-model="recipe.about"
+          v-model="contact.about"
           label="About"
           :rules="aboutRules"
           required
         ></v-text-field>
         <v-textarea
-          v-model="recipe.address"
+          v-model="contact.address"
           label="Address"
           :rules="addressRules"
           required
         ></v-textarea>
         <v-textarea
-          v-model="recipe.event"
+          v-model="contact.event"
           label="Special Event, Ceremony or Celebration"
           :rules="eventRules"
           required
@@ -64,7 +64,7 @@ export default {
   },
   data() {
     return {
-      recipe: {
+      contact: {
         name: "",
         telephone: "",
         about: "",
@@ -115,22 +115,22 @@ export default {
   },
   methods: {
     load(id) {
-      API.getContact(id).then(recipe => {
-        this.recipe = recipe;
+      API.getContact(id).then(contact => {
+        this.contact = contact;
       });
     },
     submit() {
       const data = {
-        name: this.recipe.name,
-        telephone: this.recipe.telephone,
-        about: this.recipe.about,
-        address: this.recipe.address,
-        event: this.recipe.event,
+        name: this.contact.name,
+        telephone: this.contact.telephone,
+        about: this.contact.about,
+        address: this.contact.address,
+        event: this.contact.event,
         image: this.file.name,
-        userId: this.recipe.userId
+        userId: this.contact.userId
       };
       //console.log(this.token)
-      const URL = "http://localhost:3000/contacts/" + this.recipe.id + "";
+      const URL = "http://localhost:3000/contacts/" + this.contact.id + "";
       axios({
         method: "patch",
         url: URL,
@@ -141,7 +141,7 @@ export default {
         data: data
       })
         .then(_ => {
-          router.push("/recipes");
+          router.push("/contacts");
         })
         .catch(error => {});
 

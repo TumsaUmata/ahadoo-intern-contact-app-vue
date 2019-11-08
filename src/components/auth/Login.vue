@@ -70,15 +70,15 @@ export default {
       const credentials = {
         email: this.email,
         password: this.password,
-      }
+      };
 
       axios.post('http://localhost:3000/users/login', credentials)
         .then(response => {
           console.log(response)
-          sessionStorage.setItem('token',response.data.token_userId[0])
-          sessionStorage.setItem('userId',response.data.token_userId[1])
+          sessionStorage.setItem('token',response.data.token_userId[0]);
+          sessionStorage.setItem('userId',response.data.token_userId[1]);
           store.dispatch('setApiToken', response.data.token_userId[0]);
-          router.push('/recipes');
+          router.push('/contacts');
 
       })
       .catch((error) => {

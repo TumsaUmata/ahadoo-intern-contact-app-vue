@@ -3,31 +3,31 @@
     <v-flex xs12 sm8 offset-sm2>
       <v-form ref="form" v-model="valid">
         <v-text-field
-          v-model="recipe.name"
+          v-model="contact.name"
           label="Name"
           :rules="nameRules"
           required
         ></v-text-field>
         <v-text-field
-          v-model="recipe.telephone"
+          v-model="contact.telephone"
           label="Telephone"
           :rules="telephoneRules"
           required
         ></v-text-field>
         <v-text-field
-          v-model="recipe.about"
+          v-model="contact.about"
           label="About"
           :rules="aboutRules"
           required
         ></v-text-field>
         <v-textarea
-          v-model="recipe.address"
+          v-model="contact.address"
           label="Address"
           :rules="addressRules"
           required
         ></v-textarea>
         <v-textarea
-          v-model="recipe.event"
+          v-model="contact.event"
           label="Special Event, Ceremony or Celebration"
           :rules="eventRules"
           required
@@ -46,21 +46,36 @@
           ref="file"
           v-on:change="handleFileUpload()"
         />
+
         <v-btn class="mr-4" @click="submit">submit</v-btn>
         <v-btn @click="clear">clear</v-btn>
       </v-form>
+
+
+
+      <div v-if="imageData.length > 0">
+        <img class="preview" :src="imageData" v-on:change="previewImage">
+      </div>
+
+      <v-img
+        :src="
+          this.preview + this.file.name
+        "
+        height="400px"
+      ></v-img>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
+
 import axios from "axios";
 import router from "../../router";
 
 export default {
   data() {
     return {
-      recipe: {
+      contact: {
         name: "",
         telephone: "",
         about: "",
@@ -68,7 +83,9 @@ export default {
         event: ""
         //image: this.image.name
       },
+      imageData: "",
       file: "",
+      preview: 'http://localhost:3000/containers/images/download/',
       valid: true,
       nameRules: [
         name => {
@@ -84,8 +101,7 @@ export default {
       ],
       aboutRules: [
         about => {
-          if (about.trim() === "")
-            return "About must not be empty!";
+          if (about.trim() === "") return "About must not be empty!";
           return true;
         }
       ],
@@ -107,11 +123,11 @@ export default {
   methods: {
     submit() {
       const data = {
-        name: this.recipe.name,
-        about: this.recipe.about,
-        telephone: this.recipe.telephone,
-        address: this.recipe.address,
-        event: this.recipe.event,
+        name: this.contact.name,
+        about: this.contact.about,
+        telephone: this.contact.telephone,
+        address: this.contact.address,
+        event: this.contact.event,
         image: this.file.name
       };
 
@@ -127,7 +143,7 @@ export default {
         data: data
       })
         .then(_ => {
-          router.push("/recipes");
+          router.push("/contacts");
         })
         .catch(error => {});
 
@@ -154,6 +170,21 @@ export default {
     handleFileUpload() {
       console.log(this.$refs.file.files[0].name);
       this.file = this.$refs.file.files[0];
+    },
+    onFileChange(e) {
+      const file = e.target.files[0];
+      this.url = URL.createObjectURL(file);
+    },
+    previewImage: function(event) {
+      const input = event.target;
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.imageData = e.target.result;
+          console.log(e.target);
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
     }
   }
 };
